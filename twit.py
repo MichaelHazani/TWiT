@@ -29,15 +29,16 @@ def mainmenu():
     cprint(figlet_format('TWiT!', font='doh'), 'white', 'on_blue',
            attrs=['bold'])
     print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-    print "Welcome to Twit! A little thing for Twitter."
+    cprint("Welcome to Twit! A little thing for Twitter.", 'cyan')
     menuquestion()
 
 
 def menuquestion():
     """Prompt the user to choose an option"""
-    print "What would you like to do?"
-    print ("Select (S)earch keywords, get (U)ser statuses, "
-           "see current (T)rends, access the (L)ivestream or (Q)uit")
+    cprint("What would you like to do?", 'cyan')
+    cprint("Select (S)earch keywords, get (U)ser statuses, "
+           "see current (T)rends, access the (L)ivestream or (Q)uit", 'red',
+           attrs=['reverse'])
     menuchoice = raw_input(">").upper()
     if menuchoice == "S":
         search()
@@ -54,7 +55,7 @@ def menuquestion():
 
     elif menuchoice != "Q" and menuchoice != "Q" and menuchoice != "Q":
         print "\n"
-        print "Please enter S, U or Q"
+        cprint("Please enter S, U or Q", 'red', attrs=['reverse'])
         print "\n"
         menuquestion()
 
@@ -75,7 +76,8 @@ def search():
     resultuser = [s.user.name for s in results]
     resultfinal = zip(resultuser, resultlist)
     resultfinallist = list(resultfinal)
-    print "\n".join([str(x) for x in resultfinallist])
+    cprint("\n\n".join([str(x) for x in resultfinallist]),
+           'green', attrs=['bold'])
     print "\n\n\n\n\n\n\n"
     searchprompt()
 
@@ -105,16 +107,14 @@ def userstatuses():
     print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     chosenuser = raw_input("Whose statuses do you want to check out? \n@")
     # cuformatted = "\'%s\'" % chosenuser
-    print "Searching for statuses by %s" % chosenuser
+    cprint("Searching for statuses by @%s" % chosenuser, 'red',
+           attrs=['reverse'])
     statuses = api.GetUserTimeline(screen_name=chosenuser)
-    statustext = [s.text for s in statuses]
-    statususer = [s.user.name for s in statuses]
-    statusfinal = zip(statususer, statustext)
-    statuslist = list(statusfinal)
-    print "\n".join([str(x) for x in statuslist])
-    # friends = api.GetFriends()
-    # print [u.name for u in friends]
-    print "\n\n\n\n\n\n\n"
+    mutstatuses = list(statuses)
+    for s in mutstatuses:
+
+        cprint(s.created_at + " @" + s.user.name + ": " + s.text + "\n",
+               'green', attrs=['bold'])
     statusprompt()
 
 
@@ -139,10 +139,10 @@ def trends():
     print(chr(27) + "[2J")
     cprint(figlet_format('Get Current Trends!', font='big'), 'white', 'on_red',
            attrs=['bold'])
-    print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    print "\n\n"
     trendresults = api.GetTrendsCurrent()
     trendformatted = " \n".join(str(e) for e in trendresults)
-    print trendformatted
+    cprint(trendformatted, 'green', attrs=['bold'])
     print "\n\n\n\n\n\n\n"
     trendsprompt()
 
@@ -171,8 +171,9 @@ def stream():
     for tweet in current:
         if tweet.get('text'):
             try:
-                print "(%s) @%s %s" % (tweet["created_at"], tweet["user"]
-                                       ["screen_name"], tweet["text"])
+                cprint("(%s) @%s %s" % (tweet["created_at"], tweet["user"]
+                                        ["screen_name"], tweet["text"]),
+                       'green', attrs=['bold'])
             except KeyboardInterrupt:
                 mainmenu()
 

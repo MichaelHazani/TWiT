@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
-# ToDo:
-# GetTrendsCurrent --DONE
-
+# To Do:
+# -get out of stream somehow, figure out keyboardinterrupt
 
 import sys
 import twitter
@@ -39,7 +37,7 @@ def menuquestion():
     """Prompt the user to choose an option"""
     print "What would you like to do?"
     print ("Select (S)earch keywords, get (U)ser statuses, "
-           "see current (T)rends or (Q)uit")
+           "see current (T)rends, access the (L)ivestream or (Q)uit")
     menuchoice = raw_input(">").upper()
     if menuchoice == "S":
         search()
@@ -50,6 +48,10 @@ def menuquestion():
     elif menuchoice == "Q":
         print(chr(27) + "[2J")
         quit()
+    elif menuchoice == "L":
+        print(chr(27) + "[2J")
+        stream()
+
     elif menuchoice != "Q" and menuchoice != "Q" and menuchoice != "Q":
         print "\n"
         print "Please enter S, U or Q"
@@ -70,7 +72,10 @@ def search():
         resultnum = 15
     results = api.GetSearch(term=query, count=resultnum)
     resultlist = [x.text for x in results]
-    print "\n".join(resultlist)
+    resultuser = [s.user.name for s in results]
+    resultfinal = zip(resultuser, resultlist)
+    resultfinallist = list(resultfinal)
+    print "\n".join([str(x) for x in resultfinallist])
     print "\n\n\n\n\n\n\n"
     searchprompt()
 
@@ -102,8 +107,11 @@ def userstatuses():
     # cuformatted = "\'%s\'" % chosenuser
     print "Searching for statuses by %s" % chosenuser
     statuses = api.GetUserTimeline(screen_name=chosenuser)
-    statuslist = [s.text for s in statuses]
-    print "\n".join(statuslist)
+    statustext = [s.text for s in statuses]
+    statususer = [s.user.name for s in statuses]
+    statusfinal = zip(statususer, statustext)
+    statuslist = list(statusfinal)
+    print "\n".join([str(x) for x in statuslist])
     # friends = api.GetFriends()
     # print [u.name for u in friends]
     print "\n\n\n\n\n\n\n"
@@ -153,4 +161,19 @@ def trendsprompt():
         print "Please enter M or R"
         print "\n"
     trendsprompt()
+
+
+def stream():
+    trackphrase = raw_input("Enter words to filter the stream by: \n>")
+    if trackphrase == "":
+        trackphrase = "a"
+    current = api.GetStreamFilter(track=[trackphrase])
+    for tweet in current:
+        if tweet.get('text'):
+            try:
+                print "(%s) @%s %s" % (tweet["created_at"], tweet["user"]
+                                       ["screen_name"], tweet["text"])
+            except KeyboardInterrupt:
+                mainmenu()
+
 mainmenu()

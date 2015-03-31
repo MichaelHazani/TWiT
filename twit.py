@@ -164,17 +164,17 @@ def trendsprompt():
 
 
 def stream():
-    trackphrase = raw_input("Enter words to filter the stream by: \n>")
-    if trackphrase == "":
-        trackphrase = "a"
-    current = api.GetStreamFilter(track=[trackphrase])
-    for tweet in current:
-        if tweet.get('text'):
-            try:
+    try:
+        trackphrase = raw_input("Enter words to filter the stream by: \n>")
+        if trackphrase == "":
+            trackphrase = "a"
+        current = api.GetStreamFilter(track=[trackphrase])
+        for tweet in current:
+            if tweet.get('text'):
                 cprint("(%s) @%s %s" % (tweet["created_at"], tweet["user"]
-                                        ["screen_name"], tweet["text"]),
+                                             ["screen_name"], tweet["text"]),
                        'green', attrs=['bold'])
-            except KeyboardInterrupt:
-                mainmenu()
+    except KeyboardInterrupt:
+        mainmenu()
 
 mainmenu()

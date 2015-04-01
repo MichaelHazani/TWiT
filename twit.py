@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# To Do:
-# -get out of stream somehow, figure out keyboardinterrupt
-
 import sys
 import twitter
 from colorama import init
@@ -12,7 +9,8 @@ from pyfiglet import figlet_format
 reload(sys)
 sys.setdefaultencoding("utf8")
 
-# get access to the Api with michaelhazani's keys
+# get access to the Api with @twitisbest's keys
+
 api = twitter.Api(consumer_key='wrNczJOfwAVb5g7UdOENTEgK0',
                   consumer_secret='XwKCnpTfZKASNaGUWUT3wtCcTcTtLiHNpXN1F0YcfgT'
                                   'zp4dzXT',

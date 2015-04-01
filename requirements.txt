@@ -1,0 +1,4 @@
+termcolor==1.1.0
+colorama==0.3.3
+pyfiglet==0.7.2
+python-twitter==2.2

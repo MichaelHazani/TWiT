@@ -1,2 +1,2 @@
 # TWiT
-A Little Twitter Experiment
+A Little Pythonic Twitter Experiment
